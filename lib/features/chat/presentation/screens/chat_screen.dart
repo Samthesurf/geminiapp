@@ -203,12 +203,47 @@ class _ChatInputBarState extends State<ChatInputBar> {
                         context.read<ChatBloc>().add(ChatInputStarted());
                       },
                     ),
-                    ),
+                  ),
 
-                    if (state is ChatTyping) ...[]
-                  
-                ]
-              )
+                  // Conditional Icons based on state and text content
+                  if (state is ChatTyping && state.text.isNotEmpty) ...[
+                    // Send Icon when typing
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: IconButton(
+                        icon: Icon(Icons.send, color: Colors.blue, size: 30), // Changed color for visibility
+                        onPressed: () {
+                          // Dispatch send message event
+                          context.read<ChatBloc>().add(
+                            ChatMessageSent(message: _textController.text),
+                          );
+                          _textController.clear(); // Clear text field after sending
+                        },
+                      ),
+                    ),
+                  ] else ...[
+                    // Initial Icons (Mic and Gallery) when not typing or text is empty
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: IconButton(
+                        icon: Icon(Icons.mic_none_outlined, color: Colors.grey, size: 30),
+                        onPressed: () {
+                          // TODO: Implement microphone action
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: IconButton(
+                        icon: Icon(Icons.graphic_eq_rounded, color: Colors.grey, size: 30),
+                        onPressed: () {
+                          // TODO: Implement image selection action
+                        },
+                      ),
+                    ),
+                  ]
+                ],
+              ),
             ),
           )
         );
